@@ -1,0 +1,103 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // const p = new Promise((resolve, reject) => {
+        //     resolve()
+        // })
+        //     .then((value) => {
+        //         console.log("成功");
+        //     }, (reason) => {
+        //         console.log("失败");
+        //     })
+
+        // const t = p.then((value) => {
+        //     console.log(("p成功"));
+        //     // 如果这里这里的代码出错，会将t实例的状态改为
+        //     // 打印一个 未定义的变量 abc
+        //     console.log(abc);
+        // }, (reason) => {
+        //     console.log("失败");
+        // })
+
+        // t.then((value) => {
+        //     console.log("t成功", value);
+        // }, (reason) => {
+        //     console.log("t失败", reason);
+        // })
+
+        /*
+        打印结果：
+        成功
+        p成功
+        t失败 ReferenceError: abc is not defined
+        */
+
+        /*
+        打印结果
+        Promise
+            [[Prototype]]: Promise
+                catch: ƒ catch()
+                constructor: ƒ Promise()
+                finally: ƒ finally()
+                then: ƒ then()
+                Symbol(Symbol.toStringTag): "Promise"
+            [[PromiseState]]: "fulfilled"
+            [[PromiseResult]]:undefined
+        */
+
+        // const p = new Promise((resolve, reject) => {
+        //     // 抛出一个错误模拟出错
+        //     throw new Error('执行出错')
+        // })
+
+        // p.catch((reason) => {
+        //     console.log('失败', reason)
+        // })
+        /*
+        打印结果：
+        失败 ReferenceError: abc is not defined
+        */
+
+
+        function getData(url, data = {}) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: data,
+                    success: function (res) {
+                        resolve(res)
+                    },
+                    error: function (err) {
+                        reject(err)
+                    }
+                })
+            })
+        }
+        getData('data1.json').then((data) => {
+            // 成功时被执行
+            // 根据第一次返回的数据，做第二次请求
+            return getData('data1.json', data)
+        }).then((data) => {
+            // 成功时被执行
+            // 根据第er次返回的数据，做第三次请求
+            return getData('data1.json', data)
+        })
+            .catch(reason => {
+                // 失败时被执行
+                console.log(reason)
+            })
+
+    </script>
+</body>
+
+</html>
